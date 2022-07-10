@@ -1,0 +1,2 @@
+# agenda
+django project: agenda
