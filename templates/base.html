@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'partials/_head.html' %}
+    <title>{% block 'title' %}{% endblock %}Agenda</title>
+</head>
+<body>
+<!-- Navigation -->
+{% include 'partials/_nav.html' %}
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'partials/_messages.html' %}
+            <br><br>
+            {%block 'content'%}{%endblock%}
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+View Category |
+{% endblock %}
+
+{% block 'content' %}
+<div>
+    <h1 class="mt-5">Categories found: {{ total_categories_found }}</h1>
+    <a href="{% url 'register_category' %}">
+        <button type="submit" class="btn btn-success">Register Category</button>
+    </a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+            <td>
+                <a href="{% url 'detail_category' category.id %}">
+                    <button type="submit" class="btn btn-primary">Detail</button>
+                </a>
+                <a href="{% url 'detail_category' category.id %}">
+                    <button type="submit" class="btn btn-warning" style="width: 8vh;">Edit</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
