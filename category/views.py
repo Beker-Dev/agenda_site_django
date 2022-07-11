@@ -59,3 +59,31 @@ def remove_category(request, category_id):
         messages.success(request, f'Category [{category.name}] has been removed!')
     finally:
         return redirect('view_category')
+
+
+@login_required(redirect_field_name='login_account')
+def search_category(request):
+    if request.method == 'GET':
+        search = request.GET.get('search')
+
+        if search is None:
+            messages.error(request, 'Error: Invalid search parameters')
+            return redirect('view_category')
+        elif not search:
+            messages.info(request, 'Search field is empty!')
+        else:
+            messages.info(request, 'Search successfully realized!')
+
+        categories = Category.objects.filter(name__icontains=search)
+        total_categories_found = len(categories)
+
+        paginator = Paginator(categories, 10)
+        page_number = request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        category_object = {
+            'categories': page_object,
+            'total_categories_found': total_categories_found
+        }
+
+        return render(request, 'category/view_category.html', category_object)

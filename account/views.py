@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib import auth, messages
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 from .models import UserForm
 
 
@@ -81,3 +83,38 @@ def register_account(request):
         else:
             messages.error(request, 'Account could not be registered!')
             return render(request, 'account/register_account.html', {'form': form})
+
+
+@login_required(redirect_field_name='login_account')
+def search_account(request):
+    if request.method == 'GET':
+        search = request.GET.get('search')
+
+        if search is None:
+            messages.error(request, 'Error: Invalid search parameters!')
+            return redirect('view_account')
+        elif not search:
+            messages.info(request, 'Search field is empty!')
+        else:
+            messages.info(request, 'Search successfully realized!')
+
+        full_name = Concat('first_name', Value(' '), 'last_name')
+
+        accounts = User.objects.annotate(
+            full_name=full_name
+        ).filter(
+            Q(full_name__icontains=search) | Q(username__icontains=search) | Q(email__icontains=search)
+        )
+
+        total_accounts_found = len(accounts)
+
+        paginator = Paginator(accounts, 10)
+        page_number = request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        account_object = {
+            'accounts': page_object,
+            'total_accounts_found': total_accounts_found
+        }
+
+        return render(request, 'account/view_account.html', account_object)

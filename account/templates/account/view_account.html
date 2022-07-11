@@ -6,9 +6,21 @@ View Account |
 
 {% block 'content' %}
 <div>
-    <h5 style="margin-top: -5vh; margin-left: 120vh;">
+    <h5 style="margin-top: -5vh; margin-left: 120vh; margin-bottom: 2vh;">
         Logged as: <strong>{{ account_logged_in }}</strong>
     </h5>
+
+    <form method="get" action="{% url 'search_account' %}">
+        <div class="form-group row">
+            <div class="col-12">
+                <input class="form-control"
+                       type="search" value="{{ request.GET.search }}"
+                       id="search-input"
+                       placeholder="Search Account"
+                       name="search">
+            </div>
+        </div>
+    </form>
 
     <h1 class="mt-5">Accounts found: {{ total_accounts_found }}</h1>
     <a href="{% url 'register_account' %}">
@@ -51,11 +63,11 @@ View Account |
         {% for page in accounts.paginator.page_range %}
         {% if accounts.number == page %}
         <li class="page-item active">
-            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            <a class="page-link" href="?page={{ page }}&search={{request.GET.search}}">{{ page }}</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            <a class="page-link" href="?page={{ page }}&search={{request.GET.search}}">{{ page }}</a>
         </li>
         {% endif %}
         {% endfor %}

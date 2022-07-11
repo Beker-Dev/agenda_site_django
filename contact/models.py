@@ -6,7 +6,7 @@ from category.models import Category
 
 class Contact(models.Model):
     name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50, blank=True)
     phone = models.CharField(max_length=20, unique=True)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     email = models.CharField(max_length=50, blank=True)

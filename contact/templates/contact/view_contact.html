@@ -2,6 +2,18 @@
 
 {% block 'content' %}
 <div>
+    <form method="get" action="{% url 'search_contact' %}">
+        <div class="form-group row">
+            <div class="col-12">
+                <input class="form-control"
+                       type="search" value="{{ request.GET.search }}"
+                       id="search-input"
+                       placeholder="Search Contact"
+                       name="search">
+            </div>
+        </div>
+    </form>
+
     <h1 class="mt-5">Contacts found: {{ total_contacts_found }}</h1>
     <a href="{% url 'register_contact' %}">
         <button type="submit" class="btn btn-success">Register Contact</button>
@@ -12,6 +24,7 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Surname</th>
             <th>Options</th>
         </tr>
         </thead>
@@ -20,6 +33,13 @@
         <tr>
             <td>{{ contact.id }}</td>
             <td>{{ contact.name }}</td>
+
+            {% if contact.surname %}
+            <td>{{ contact.surname }}</td>
+            {% else %}
+            <td>-------</td>
+            {% endif %}
+
             <td>
                 <a href="{% url 'detail_contact' contact.id %}">
                     <button type="submit" class="btn btn-primary">Detail</button>
@@ -37,15 +57,15 @@
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         {% for page in contacts.paginator.page_range %}
-            {% if contacts.number == page %}
-                <li class="page-item active">
-                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                </li>
-            {% endif %}
+        {% if contacts.number == page %}
+        <li class="page-item active">
+            <a class="page-link" href="?page={{ page }}&search={{request.GET.search}}">{{ page }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page }}&search={{request.GET.search}}">{{ page }}</a>
+        </li>
+        {% endif %}
         {% endfor %}
     </ul>
 </nav>

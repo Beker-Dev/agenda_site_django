@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 from django.contrib.auth.decorators import login_required
 from .models import Contact, ContactForm
 
@@ -63,3 +65,39 @@ def register_contact(request):
                 return redirect('view_contact')
 
         return render(request, 'contact/register_contact.html', {'form': form})
+
+
+@login_required(redirect_field_name='login_account')
+def search_contact(request):
+    if request.method == 'GET':
+        search = request.GET.get('search')
+
+        if search is None:
+            messages.error(request, 'Invalid search parameters')
+            redirect('view_contact')
+        elif not search:
+            messages.info(request, 'Search field is empty!')
+        else:
+            messages.info(request, 'Search successfully realized!')
+
+        search_fields = Concat('name', Value(' '), 'surname')
+
+        contacts = Contact.objects.annotate(
+            full_name=search_fields
+        ).filter(
+            Q(full_name__icontains=search) | Q(phone__icontains=search) | Q(email__icontains=search) |
+            Q(phone__icontains=search)
+        )
+
+        total_contacts_found = len(contacts)
+
+        paginator = Paginator(contacts, 10)
+        page_number = request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        contact_object = {
+            'contacts': page_object,
+            'total_contacts_found': total_contacts_found
+        }
+
+        return render(request, 'contact/view_contact.html', contact_object)
