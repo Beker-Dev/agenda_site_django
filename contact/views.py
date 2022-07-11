@@ -86,7 +86,7 @@ def search_contact(request):
             full_name=search_fields
         ).filter(
             Q(full_name__icontains=search) | Q(phone__icontains=search) | Q(email__icontains=search) |
-            Q(phone__icontains=search)
+            Q(phone__icontains=search) | Q(category__name__icontains=search)
         )
 
         total_contacts_found = len(contacts)

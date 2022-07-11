@@ -77,7 +77,15 @@ def register_account(request):
     elif request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = User.objects.create_user(
+                first_name=request.POST.get('first_name'),
+                last_name=request.POST.get('last_name'),
+                username=request.POST.get('username'),
+                password=request.POST.get('password'),
+                email=request.POST.get('email')
+            )
+            user.save()
+
             messages.success(request, 'Account has been registered!')
             return redirect('view_account')
         else:
