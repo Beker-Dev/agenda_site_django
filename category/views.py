@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator
 from .models import Category, CategoryForm
 
@@ -22,11 +21,10 @@ def register_category(request):
 
 def view_category(request):
     if request.method == 'GET':
-        categories = Category.objects.filter(is_active=True)
+        categories = Category.objects.filter()
         total_categories_found = len(categories)
         paginator = Paginator(categories, 5)
         page_number = request.GET.get('page')
-        print(page_number)
         page_object = paginator.get_page(page_number)
 
         category_object = {
@@ -39,13 +37,12 @@ def view_category(request):
 
 def detail_category(request, category_id):
     if request.method == 'GET':
-        category = get_object_or_404(Category, id=category_id, is_active=True)
+        category = get_object_or_404(Category, id=category_id)
         return render(request, 'category/detail_category.html', {'category': category})
 
 
 def remove_category(request, category_id):
     category = Category.objects.get(id=category_id)
-    category.is_active = False
-    category.save()
+    category.delete()
     messages.success(request, f'Category [{category.name}] has been removed!')
     return redirect('view_category')

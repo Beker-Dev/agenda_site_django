@@ -6,10 +6,12 @@ from django import forms
 class Category(models.Model):
     name = models.CharField(max_length=30, unique=True)
     register_date = models.DateTimeField(default=timezone.now)
-    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        exclude = ('is_active', 'register_date')
+        exclude = ('register_date',)
