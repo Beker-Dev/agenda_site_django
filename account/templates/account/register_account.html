@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+{% endblock %}
+
+{% block 'content' %}
+<div>
+    <form method="POST" action="{% url 'register_account' %}">
+        {% csrf_token %}
+        <table class="table">
+            {{ form }}
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1vh;">Register</button>
+                    <a href="{% url 'view_account'%}" class="btn btn-*"
+                       style="color: white; background-color: red; height: 5.2vh; margin-top: 1vh">
+                        Cancel
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

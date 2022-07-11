@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+Login |
+{% endblock %}
+
+{% block 'content' %}
+<div>
+    <form method="POST" action="{% url 'login_account' %}">
+        {% csrf_token %}
+       <div class="form-group">
+            <label >Username</label>
+            <input type="text" class="form-control" value="{{request.POST.username}}"
+                   placeholder="Usuario" name="username">
+        </div>
+        <div class="form-group">
+            <label>Passoword</label>
+            <input type="password" class="form-control" placeholder="Senha" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 1vh;">Entrar</button>
+    </form>
+</div>
+{% endblock %}

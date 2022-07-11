@@ -1,9 +1,12 @@
+import django.db.utils
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 from .models import Category, CategoryForm
 
 
+@login_required(redirect_field_name='login_account')
 def register_category(request):
     if request.method == 'GET':
         form = CategoryForm()
@@ -19,6 +22,7 @@ def register_category(request):
             return render(request, 'category/register_category.html', {'form': form})
 
 
+@login_required(redirect_field_name='login_account')
 def view_category(request):
     if request.method == 'GET':
         categories = Category.objects.filter()
@@ -35,14 +39,23 @@ def view_category(request):
         return render(request, 'category/view_category.html', category_object)
 
 
+@login_required(redirect_field_name='login_account')
 def detail_category(request, category_id):
     if request.method == 'GET':
         category = get_object_or_404(Category, id=category_id)
         return render(request, 'category/detail_category.html', {'category': category})
 
 
+@login_required(redirect_field_name='login_account')
 def remove_category(request, category_id):
     category = Category.objects.get(id=category_id)
-    category.delete()
-    messages.success(request, f'Category [{category.name}] has been removed!')
-    return redirect('view_category')
+
+    try:
+        category.delete()
+    except django.db.utils.IntegrityError as e:
+        messages.error(request, f'Error: Could not remove Category [{category.name}], '
+                                f'because it is being used by Contact!')
+    else:
+        messages.success(request, f'Category [{category.name}] has been removed!')
+    finally:
+        return redirect('view_category')

@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
+from django.contrib.auth.decorators import login_required
 from .models import Contact, ContactForm
 
 
+@login_required(redirect_field_name='login_account')
 def view_contact(request):
     if request.method == 'GET':
         contacts = Contact.objects.all()
         total_contacts_found = len(contacts)
-        paginator = Paginator(contacts, 10)
+        paginator = Paginator(contacts, 5)
         page_number = request.GET.get('page')
         page_object = paginator.get_page(page_number)
 
@@ -21,12 +23,14 @@ def view_contact(request):
         return render(request, 'contact/view_contact.html', contact_object)
 
 
+@login_required(redirect_field_name='login_account')
 def detail_contact(request, contact_id):
     if request.method == 'GET':
         contact = get_object_or_404(Contact, id=contact_id)
         return render(request, 'contact/detail_contact.html', {'contact': contact})
 
 
+@login_required(redirect_field_name='login_account')
 def remove_contact(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
     contact.delete()
@@ -34,6 +38,7 @@ def remove_contact(request, contact_id):
     return redirect('view_contact')
 
 
+@login_required(redirect_field_name='login_account')
 def register_contact(request):
     if request.method == 'GET':
         form = ContactForm()
