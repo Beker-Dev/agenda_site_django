@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+Detail Account: {{ account.username }} |
+{% endblock %}
+
+{% block 'content' %}
+<h1 class="mt-5">{{account.username}}</h1>
+<dl>
+    <dt>ID</dt>
+    <dd>{{account.id}}</dd>
+
+    <dt>First Name</dt>
+    {% if account.first_name %}
+        <dd>{{account.first_name}}</dd>
+    {% else %}
+        <dd>-------</dd>
+    {% endif %}
+
+    <dt>Last Name</dt>
+    {% if account.last_name %}
+        <dd>{{account.last_name}}</dd>
+    {% else %}
+        <dd>-------</dd>
+    {% endif %}
+
+    <dt>Email</dt>
+    {% if account.email %}
+        <dd>{{account.email}}</dd>
+    {% else %}
+        <dd>-------</dd>
+    {% endif %}
+
+    <dt>Register Date</dt>
+    <dd>{{account.date_joined|date:'d/m/Y - H:i:s'}}</dd>
+
+    <dt>Last Login</dt>
+    {% if account.last_login %}
+        <dd>{{account.last_login|date:'d/m/Y - H:i:s'}}</dd>
+    {% else %}
+        <dd>---/---/---</dd>
+    {% endif %}
+
+    <a href="{% url 'view_account'%}" class="btn btn-*"
+       style="color: white; background-color: red; height: 5.2vh; margin-top: 1vh">
+        Back
+    </a>
+</dl>
+{%endblock%}

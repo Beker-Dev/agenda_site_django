@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+Detail Contact: {{ contact.name }} {{contact.surname}} |
+{% endblock %}
+
+{% block 'content' %}
+<h1 class="mt-5">{{contact.name}} {{contact.surname}}</h1>
+<dl>
+    {% if contact.picture %}
+        <p>
+            <img src="{{ contact.picture.url }}" style="max-width: 250px; height: auto;">
+        </p>
+    {% endif %}
+
+    <dt>ID</dt>
+    <dd>{{contact.id}}</dd>
+
+    <dt>Register Date</dt>
+    <dd>{{contact.register_date|date:'d/m/Y - H:i:s'}}</dd>
+
+    <dt>Phone</dt>
+    <dd>{{contact.phone}}</dd>
+
+    <dt>Category</dt>
+    <dd>{{contact.category}}</dd>
+
+    <dt>Email</dt>
+    <dd>{{contact.email}}</dd>
+
+    <dt>Description</dt>
+    <dd>{{contact.description}}</dd>
+
+    <a href="{% url 'view_contact'%}" class="btn btn-*"
+       style="color: white; background-color: red; height: 5.2vh; margin-top: 1vh">
+        Back
+    </a>
+</dl>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+Detail Category: {{ category.name }} |
+{% endblock %}
+
+{% block 'content' %}
+<h1 class="mt-5">{{category.name}}</h1>
+<dl>
+    <dt>ID</dt>
+    <dd>{{category.id}}</dd>
+
+    <dt>Register Date</dt>
+    <dd>{{category.register_date|date:'d/m/Y - H:i:s'}}</dd>
+    <a href="{% url 'view_category'%}" class="btn btn-*"
+       style="color: white; background-color: red; height: 5.2vh; margin-top: 1vh">
+        Back
+    </a>
+</dl>
+{%endblock%}

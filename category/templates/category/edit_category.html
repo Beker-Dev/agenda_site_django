@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+Edit Category: {{ category.name }} |
+{% endblock %}
+
+{% block 'content' %}
+<div>
+    <h1>
+        Edit Category: {{ category.name }}
+    </h1>
+    <form method="POST" action="{% url 'edit_category' category.id %}">
+        {% csrf_token %}
+        <table class="table">
+            {{ form }}
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1vh;">Save</button>
+                    <a href="{% url 'view_category'%}" class="btn btn-*"
+                       style="color: white; background-color: red; height: 5.2vh; margin-top: 1vh">
+                        Cancel
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}
